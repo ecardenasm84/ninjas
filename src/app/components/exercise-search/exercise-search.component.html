@@ -1,0 +1,108 @@
+<section class="page">
+
+  <div class="header-card">
+    <div>
+      <span class="section-label">API Ninjas Ejercicios</span>
+      <h1>Buscador</h1>
+    
+    </div>
+
+
+  </div>
+
+  <section class="search-panel">
+    <label for="muscle">Músculo a trabajar</label>
+
+    <div class="search-row">
+      <div class="input-box">
+        <i class="bi bi-search"></i>
+        <input
+          id="muscle"
+          type="text"
+          [(ngModel)]="muscle"
+          placeholder="Ejemplo: chest, legs, biceps, back"
+          (keyup.enter)="searchExercises()">
+      </div>
+
+      <button type="button" (click)="searchExercises()" [disabled]="loading">
+        <i class="bi bi-lightning-charge-fill"></i>
+        {{ loading ? 'Buscando...' : 'Buscar' }}
+      </button>
+    </div>
+
+    <div class="examples">
+      <span>Ejemplos rápidos:</span>
+      <button
+        type="button"
+        *ngFor="let example of muscleExamples"
+        (click)="selectExample(example)">
+        {{ example }}
+      </button>
+    </div>
+  </section>
+
+  <div *ngIf="loading" class="message loading">
+    <i class="bi bi-hourglass-split"></i>
+    Consultando ejercicios en API Ninjas...
+  </div>
+
+  <div *ngIf="errorMessage && !loading" class="message error">
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    {{ errorMessage }}
+  </div>
+
+  <section *ngIf="exercises.length > 0" class="results-summary">
+    <div>
+      <span>Resultados encontrados</span>
+      <h2>{{ exercises.length }} ejercicios para "{{ searchedMuscle }}"</h2>
+    </div>
+
+    <button type="button" (click)="searchExercises()">
+      <i class="bi bi-arrow-clockwise"></i>
+      Actualizar
+    </button>
+  </section>
+
+  <section class="exercise-grid" *ngIf="exercises.length > 0">
+    <article
+      class="exercise-card"
+      *ngFor="let exercise of exercises; trackBy: trackByExerciseName">
+
+      <div class="exercise-top">
+        <div class="exercise-icon">
+          <i class="bi bi-person-arms-up"></i>
+        </div>
+
+        <span class="difficulty">
+          {{ exercise.difficulty || 'Sin dificultad' }}
+        </span>
+      </div>
+
+      <h2>{{ exercise.name }}</h2>
+
+      <div class="metadata">
+        <span>
+          <i class="bi bi-diagram-3-fill"></i>
+          Tipo: {{ exercise.type || 'No indicado' }}
+        </span>
+
+        <span>
+          <i class="bi bi-bullseye"></i>
+          Músculo: {{ exercise.muscle || 'No indicado' }}
+        </span>
+
+        <span>
+          <i class="bi bi-tools"></i>
+          Equipo: {{ exercise.equipment || 'No indicado' }}
+        </span>
+      </div>
+
+      <div class="instructions">
+        <h3>Instrucciones</h3>
+        <p>{{ exercise.instructions || 'Sin instrucciones disponibles.' }}</p>
+      </div>
+
+    </article>
+  </section>
+
+</section>
